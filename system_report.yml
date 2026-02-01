@@ -1,0 +1,21 @@
+---
+
+- name: Server
+  hosts: localhost
+
+  tasks:
+   - name: System Report - Time & Free Space on the Disk
+     ansible.builtin.copy:
+      dest: "/tmp/system_report.txt"
+      content: |
+         System Report
+         --------------------------------------------------------------------
+         Setup at - {{ ansible_date_time.date }} {{ ansible_date_time.time }}
+         Hostname - {{ ansible_hostname }}
+         OS - {{ ansible_distribution }} {{ ansible_distribution_version }}
+         IP Address & Interface - {{ ansible_default_ipv4.address }} , {{ ansible_default_ipv4.interface }}
+         Free Space - {{ (free_space | float / 1024**3) | int }} GB
+         --------------------------------------------------------------------
+
+     vars:
+      free_space: "{{ ansible_mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first }}"

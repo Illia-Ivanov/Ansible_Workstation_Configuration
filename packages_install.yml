@@ -1,0 +1,14 @@
+---
+
+- name: Server Eingaben
+  hosts: localhost
+
+  tasks:
+   - name: Installing the Software
+     become: true
+     ansible.builtin.apt:
+       name: htop
+       state: latest
+       update_cache: yes
+     when: ansible_os_family == "Debian"
+...
