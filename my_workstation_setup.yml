@@ -1,0 +1,21 @@
+---
+
+- name: Setup Workstation
+  hosts: localhost
+  connection: local
+
+
+  tasks:
+     - name: Erstelle Ordner
+       ansible.builtin.file:
+         path: "/root/{{ item }}"
+         state: directory
+       loop:
+         - projects
+         - backups
+         - scripts
+
+     - name: Info Datei erstellen
+       ansible.builtin.copy:
+          dest: "/root/scripts/info.txt"
+          content: "Setup am {{ ansible_date_time.date }}"
