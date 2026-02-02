@@ -1,0 +1,14 @@
+---
+
+- name: Server Daten
+  hosts: localhost
+  become: true
+
+
+  tasks:
+   - name: Dienst Prüfen, wenn gestoppt, starten
+     ansible.builtin.service:
+       name: nginx
+       state: started
+
+
