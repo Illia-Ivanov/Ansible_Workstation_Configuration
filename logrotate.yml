@@ -1,0 +1,21 @@
+---
+
+- name: Server Daten
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Logs Sammeln
+      ansible.builtin.template:
+        src: /var/log/nginx/error.log
+        dest: /tmp/log_reports/
+
+    - name: Informationen über den File bekommen
+      ansible.builtin.stat:
+        path: /var/log/nginx/error.log
+      register: info
+
+    - name: Prüfen, wie groß ist der File
+      ansible.builtin.debug:
+        msg: "The log file is {{ (info.stat.size / 1024 / 1024) | int }} MB and can´t be copied, because it is more than 100 MB"
+      when: info.stat.size > 100 * 1024 * 1024
