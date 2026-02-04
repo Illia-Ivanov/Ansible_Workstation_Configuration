@@ -1,0 +1,18 @@
+---
+
+- name: Website check
+  hosts: localhost
+  gather_facts: no
+
+
+  tasks:
+    - name: Check, if page returns successful, but fail if the word Mail not in the page contents or  returns no code 200
+      ansible.builtin.uri:
+        url: https://mail.google.com
+        return_content: true
+      register: this
+
+
+      failed_when:
+        - this.status != 200
+        - "This page is failed or 'Mail' is not in the this.Content"

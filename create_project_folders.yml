@@ -1,0 +1,19 @@
+---
+
+ - name: Setup Project Folders
+   hosts: localhost
+   become: yes
+
+
+   tasks:
+     - name: Create a required directories
+       ansible.builtin.file:
+         path: "/opt/my_project/{{ item }}"
+         state: directory
+         owner: jlemon
+         group: jlemon
+         mode: "0755"
+       loop:
+         - bin
+         - logs
+         - config
