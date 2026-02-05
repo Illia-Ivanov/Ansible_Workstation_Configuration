@@ -1,0 +1,13 @@
+---
+
+ - name: Server Daten
+   hosts: localhost
+   become: true
+
+   tasks:
+     - name: a cron job for a status check, every day at 3:00 Mornings
+       ansible.builtin.cron:
+         name: "Curl on Status Code Status check"
+         minute: 0
+         hour: 3
+         job: 'curl -o /dev/null -s -w "%{http_code}" https://google.com > /tmp/status_check.txt'

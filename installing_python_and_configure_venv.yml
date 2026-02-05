@@ -1,0 +1,21 @@
+---
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+
+    tasks:
+      - name: Install Python(PIP) and venv with git
+        ansible.builtin.apt:
+          name:
+            - python3-pip
+            - python3-venv
+            - git
+          state: present
+
+      - name: Install Python requierements
+        ansible.builtin.pip:
+         requirements: /my_app/requirements.txt
+         virtualenv: /my_app/venv
+         virtualenv_command: python3 -m venv
