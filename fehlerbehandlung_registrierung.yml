@@ -1,0 +1,22 @@
+---
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+
+    tasks:
+     - name: Überprüfung des Ordnersstatus
+       ansible.builtin.stat:
+         path: /tmp/system_report.txt
+       register: file_info
+
+     - name: Stoppe das Playbook, wenn die Datei fehlt
+       ansible.builtin.fail:
+         msg: "Fehlerhaft, Die Datei /tmp/system_report.txt wurde nicht gefunden"
+       when: not file_info.stat.exists
+
+     - name: Erfolgsmeldung
+       ansible.builtin.debug:
+         msg: "Die Datei ist da und bereit für die Verwendung"
+       when: file_info.stat.exists

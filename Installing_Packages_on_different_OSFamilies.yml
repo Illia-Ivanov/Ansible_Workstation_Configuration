@@ -1,0 +1,24 @@
+---
+
+ - name: Server Daten
+   hosts: localhost
+   become: true
+
+
+   tasks:
+     - name: Install Apache and MariaDB on Debian Family
+       ansible.builtin.apt:
+         pkg:
+           - apache2
+           - mariadb-server
+         state: latest
+       when: ansible_facts['os_family'] == "Debian"
+
+     - name: Install Apache and MariaDB on RedHat Family
+       ansible.builtin.dnf:
+         name:
+           - httpd
+           - mariadb
+         state: latest
+       when: ansible_facts['os_family'] == "Redhat"
+
