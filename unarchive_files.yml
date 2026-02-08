@@ -1,0 +1,17 @@
+---
+
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+
+
+    tasks:
+     - name: Unarchive a file that is already on the remote machine
+       ansible.builtin.unarchive:
+         src: /tmp/unarchive_me.zip
+         dest: /root/copy_of_unarchive_me/
+         remote_src: yes
+
+

@@ -1,0 +1,12 @@
+---
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+
+    tasks:
+      - name: Download file from a file path
+        ansible.builtin.get_url:
+          url: file:///tmp/test_config.conf
+          dest: /tmp/a_test_config_copy.conf
