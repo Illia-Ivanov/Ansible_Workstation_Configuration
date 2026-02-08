@@ -1,0 +1,25 @@
+---
+
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+    tasks:
+      - name: Check, ob Datei reboot-required existiert
+        ansible.builtin.stat:
+          path: /var/run/reboot-required
+        register: file_stat
+
+      - name: Wenn exisitiert, dann Meldung senden
+        ansible.builtin.debug:
+         msg: "[{{ ansible_date_time.date }}] - Server {{ inventory_hostname }} muss neu gestartet werden!"
+        when: file_stat.stat.exists
+
+
+      - name: Eintrag in admin_tasks schreiben
+        ansible.builtin.lineinfile:
+          path: /root/admin_tasks.txt
+          line: "[{{ ansible_date_time.date }}] - Server {{ inventory_hostname }} braucht Reboot"
+          create: yes
+        when: file_stat.stat.exists

@@ -1,0 +1,21 @@
+---
+
+   - name: Server Daten
+     hosts: localhost
+     become: true
+
+
+     tasks:
+       - name: Recursive find files older than 7 days
+         ansible.builtin.find:
+           paths: /tmp/
+           age: 7d
+           recurse: yes
+         register: found_files
+
+       - name: Delete found files
+         ansible.builtin.file:
+           path: "{{ item.path }}"
+           state: absent
+         loop: "{{ found_files.files }}"
+
