@@ -1,0 +1,11 @@
+---
+
+  - name: Sever Daten
+    hosts: localhost
+    become: true
+
+    tasks:
+      - name: Make a massage of the day to a Server when someone logged with SSH
+        ansible.builtin.copy:
+          content: '# This Server {{ ansible_hostname }} controlling with Ansible last Update was {{ ansible_date_time.date }} '
+          dest: /etc/motd

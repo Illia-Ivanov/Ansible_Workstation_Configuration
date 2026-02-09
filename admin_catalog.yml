@@ -1,0 +1,14 @@
+---
+
+   - name: Server Daten
+     hosts: localhost
+     become: true
+
+     tasks:
+       - name: Make a Folder for Admin Catalog in opt for a specific user
+         ansible.builtin.file:
+            path: /opt/admin_catalog/
+            state: directory
+            mode: '0770'
+            owner: jlemon
+            group: sudo
