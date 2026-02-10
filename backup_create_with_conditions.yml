@@ -1,0 +1,17 @@
+---
+
+
+   - name: Server Daten
+     hosts: localhost
+     become: true
+
+     tasks:
+       - name: Create a tar.gz Backup, if more than 5 GB Free Place on the disk is available
+         community.general.archive:
+           path: /root/Projekte_Ansible/
+           dest: /tmp/Backup_of_Projekte_Ansible.tar.gz
+           format: gz
+           force_archive: true
+         vars:
+           free_bytes: "{{ ansible_mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first }}"
+         when: free_bytes | int > (5 * 1024**3)

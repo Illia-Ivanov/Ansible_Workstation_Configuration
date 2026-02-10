@@ -1,0 +1,28 @@
+---
+
+    - name: Server Daten
+      hosts: localhost
+      become: true
+
+
+      tasks:
+        - name: Get File Infromation
+          ansible.builtin.stat:
+             path: /etc/shadow
+          register: file_stat
+
+        - name: Correct File Permissions if necessary
+          ansible.builtin.file:
+            path: /etc/shadow
+            mode: '0640'
+            owner: root
+            group: shadow
+          when: file_stat.stat.mode != '0640'
+          register: changed_result
+
+        - name: Write Audit Log, if file was changed
+          ansible.builtin.lineinfile:
+             path: /root/security_audit.log
+             line: "Permissions was changed for /etc/shadow at {{ ansible_date_time.date }}"
+             create: yes
+          when: changed_result.changed
