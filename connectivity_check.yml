@@ -1,0 +1,23 @@
+---
+
+    - name: Sever Daten
+      hosts: localhost
+      become: true
+
+
+      tasks:
+        - name: Check, if Ping works, if no, than Network Error Report
+          ansible.builtin.command:
+             cmd: ping -c 3 1.1.1 # just to check, that it works. For a real Test, give there 1.1.1.1 or another valid ip
+          register: command_result
+          ignore_errors: true
+
+        - name: Make a report, if ping has failed
+          ansible.builtin.copy:
+             dest: /tmp/network_error.txt
+             content: |
+               Error - Network is not available
+               Server - {{ ansible_hostname }}
+               Time - {{ ansible_date_time.iso8601 }}
+               Failure - {{ command_result }}
+          when: command_result.failed

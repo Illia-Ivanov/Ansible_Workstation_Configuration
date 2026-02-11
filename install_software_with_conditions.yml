@@ -1,0 +1,13 @@
+---
+
+   - name: Server Daten
+     hosts: localhost
+     become: true
+
+     tasks:
+       - name: Install nano, if the server has more than 2 GB RAM
+         ansible.builtin.apt:
+            name: nano
+            state: present
+            update_cache: yes
+         when: ansible_memtotal_mb > 2048
