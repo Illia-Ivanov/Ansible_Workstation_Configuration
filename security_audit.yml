@@ -1,0 +1,29 @@
+---
+
+
+  - name: Server Daten
+    hosts: localhost
+    become: true
+
+    tasks:
+      - name: Make a Backup, if file differs with copied version
+        ansible.builtin.copy:
+           src: /root/our/hosts
+           dest: /etc/hosts
+           mode: '0644'
+           backup: yes
+        register: file_status
+
+      - name: Send a debug message, if file was changed
+        ansible.builtin.debug:
+           msg: "Warning File /etc/hosts was changed on {{ ansible_date_time.date }} at {{ ansible_date_time.time }} oclock"
+        when: file_status.changed
+        register: changed_file
+
+
+      - name: Log this Message in central Audit-Log
+        ansible.builtin.lineinfile:
+           path: /var/log/ansible_audit.log
+           create: yes
+           line: "{{ changed_file.msg }}"
+        when: file_status.changed

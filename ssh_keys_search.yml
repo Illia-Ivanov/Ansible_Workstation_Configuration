@@ -1,0 +1,32 @@
+---
+
+
+   - name: Server Daten
+     hosts: localhost
+     become: true
+
+
+     tasks:
+       - name: Search all .pub files in the local Folder
+         ansible.builtin.set_fact:
+            key_files: "{{ query('fileglob', '/etc/ssh/*.pub') }}"
+
+       - name: If no keys found - send a Message
+         ansible.builtin.assert:
+           that: key_files | length > 0
+           fail_msg: "No .pub keys was found in /etc/ssh/ , Please add the key"
+
+
+       - name: Find all Pub keys # sorting was made with a help from gemini.
+         set_fact:
+           all_keys: |
+                       {% for file in key_files %}
+                       {{ lookup('ansible.builtin.file', file) }}
+                       {% endfor %}
+
+       - name: Key sync and delete all others
+         ansible.posix.authorized_key:
+            user: jlemon
+            state: present
+            key: "{{ all_keys }}"
+            exclusive: yes
