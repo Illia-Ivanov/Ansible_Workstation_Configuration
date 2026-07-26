@@ -1,0 +1,7 @@
+---
+    - name: Ping Widows 11 hosts
+      hosts: windows_11
+      gather_facts: no
+      tasks:
+        - name: Execute ping
+          win_ping:

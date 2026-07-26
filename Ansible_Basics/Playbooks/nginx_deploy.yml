@@ -1,0 +1,25 @@
+---
+
+   - name: Install Nginx and make a html file
+     hosts: ubuntu_vms
+     become: true
+
+
+     tasks:
+       - name: Nginx install
+         ansible.builtin.package:
+           name: nginx
+           state: present
+           
+
+       - name: set the HTML Page
+         ansible.builtin.copy:
+           src: static/index.html
+           dest: /var/www/html/index.html
+         notify: Reload Nginx
+
+     handlers:
+       - name: Reload Nginx
+         service:
+           name: nginx
+           state: reloaded

@@ -1,0 +1,5 @@
+---
+
+    - name: Cert Verwaltung
+      hosts: ubuntu_vms
+      become: true

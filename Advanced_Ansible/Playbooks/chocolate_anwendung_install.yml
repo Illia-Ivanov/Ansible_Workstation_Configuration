@@ -1,0 +1,12 @@
+---
+
+    - name: Install git using chocolate
+      hosts: windows_11
+      tasks:
+        - name: Check, ob chocolate is installed,using chocolate modul
+          win_chocolatey:
+            name: chocolatey
+        - name: Install git
+          win_chocolatey:
+            name: git
+            state: present

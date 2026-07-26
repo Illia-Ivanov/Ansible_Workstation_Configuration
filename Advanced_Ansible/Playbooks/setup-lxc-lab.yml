@@ -1,0 +1,7 @@
+---
+   - name: Setup Hosts
+     hosts: all
+     become:true
+
+   - name: Create LXC containers for all services
+     delegate_to

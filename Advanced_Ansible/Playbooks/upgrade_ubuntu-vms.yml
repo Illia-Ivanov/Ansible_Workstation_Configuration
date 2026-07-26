@@ -1,0 +1,20 @@
+---
+
+   - name: Upgrade Ubuntu VMs
+     hosts: ubuntu_vms
+     become: true
+
+     tasks:
+       - name: Update und Upgrade Packages
+         ansible.builtin.apt:
+           name: "*"
+           update_cache: yes
+           state: latest
+
+       - name: Install Apache Webserver
+         package:
+            name: "apache2"
+            state: present
+
+       - name: Ausfuerung von Command
+         shell: echo "Hallollolo" >> /etc/apache2/ports.conf

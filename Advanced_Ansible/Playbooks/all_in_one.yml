@@ -1,0 +1,38 @@
+---
+
+   - name: Install CLI Tools
+     hosts: ubuntu_vms
+
+
+     vars:
+       cli_tools:
+         - curl
+         - wget
+         - tmux
+         - screen
+         - ntfs-3g
+         - htop
+         - unzip
+         - auditd
+       webserver:
+         - nginx
+
+
+
+     tasks:
+       - name: Install CLI Tools
+         package:
+           name: "{{ item }}"
+           state: present
+         become: yes
+         with_items: "{{ cli_tools }}"
+         tags:
+           - CLI_Tools
+
+       - name: Zeige difference
+         ansible.builtin.copy:
+           dest: /tmp/diff_text.txt
+           content: | 
+                    cat to cat 1
+         tags:
+           - diff
